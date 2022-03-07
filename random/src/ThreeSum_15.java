@@ -6,10 +6,9 @@ public class ThreeSum_15 {
 		int n = nums.length;
 		Arrays.sort(nums);
 		if (nums[0] > 0 || nums[n - 1] < 0) return null;
-		int zeroCount = 0, firstPositive = n;
+		int firstPositive = n;
 		for (int i = 0; i < n; i++) {
-			if (nums[i] == 0) zeroCount++;
-			else if (nums[i] > 0) {
+			if (nums[i] > 0) {
 				firstPositive = i;
 				break;
 			}
@@ -22,11 +21,6 @@ public class ThreeSum_15 {
 			buildTwoSumMap(i, n, nums, twoSumMap);
 
 		List<List<Integer>> triplets = new LinkedList<>();
-		if (zeroCount >= 3) {
-			List<Integer> triplet = new LinkedList<>();
-			for (int i = 0; i < 3; i ++) triplet.add(0);
-			triplets.add(triplet);
-		}
 		for (final int curNum : nums) {
 			if (curNum == 0) continue;
 			List<int[]> twoSumList = twoSumMap.getOrDefault(-curNum, null);
