@@ -1,4 +1,4 @@
-public class AddStrings {
+public class AddStrings_415 {
 	public String addStrings(String num1, String num2) {
 		// implement the plus operation of a calculator
 		StringBuilder sumReverse = new StringBuilder();
@@ -20,8 +20,7 @@ public class AddStrings {
 			} else if (remainingOfLongerStr.isEmpty()) {// so carryForward > 0
 				sumReverse.append(carryForward);
 				carryForward /= 10;
-			}
-			else {
+			} else {
 				int l = remainingOfLongerStr.length();
 				int lastDigitSum = remainingOfLongerStr.charAt(l - 1) - '0' + carryForward;
 				sumReverse.append(lastDigitSum % 10);
@@ -33,8 +32,24 @@ public class AddStrings {
 		return sumReverse.reverse().toString();
 	}
 
+	public String addStringsPadZero(String num1, String num2) {
+		// implement the "plus" operation, with padded zeros.
+		int carryForward = 0; // would be either 0 or 1 in summation.
+		int pt1 = num1.length() - 1, pt2 = num2.length() - 1;
+		StringBuilder sumReversed = new StringBuilder();
+		for (; pt1 >= 0 || pt2 >= 0; pt1--, pt2--) {
+			int x1 = pt1 >= 0 ? num1.charAt(pt1) - '0' : 0;
+			int x2 = pt2 >= 0 ? num2.charAt(pt2) - '0' : 0;
+			int curDigitSum = x1 + x2 + carryForward;
+			sumReversed.append(curDigitSum % 10);
+			carryForward = curDigitSum / 10;
+		}
+		if (carryForward != 0) sumReversed.append(carryForward);
+		return sumReversed.reverse().toString();
+	}
+
 	public static void main(String[] args) {
-		AddStrings solver = new AddStrings();
-		System.out.println(solver.addStrings("1", "9"));
+		AddStrings_415 solver = new AddStrings_415();
+		System.out.println(solver.addStringsPadZero(args[0], args[1]));
 	}
 }
