@@ -13,10 +13,9 @@ public class GroupAnagrams_49 {
 
 			if (charSetToAnagGroupIndex.containsKey(hashCode)) {
 				List<Integer> groupIndices = charSetToAnagGroupIndex.get(hashCode);
-				int m = groupIndices.size();
 				boolean belongsInExistingGroup = false;
-				for (int i = 0; i < m; i++) {
-					List<String> anagGroup = anagramGroups.get(groupIndices.get(i));
+				for (Integer groupIndex : groupIndices) {
+					List<String> anagGroup = anagramGroups.get(groupIndex);
 					if (areAnagrams(anagGroup.get(0), str)) {
 						anagGroup.add(str);
 						belongsInExistingGroup = true;
