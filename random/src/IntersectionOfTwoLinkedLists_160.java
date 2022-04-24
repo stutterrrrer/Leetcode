@@ -1,15 +1,6 @@
 import java.util.HashSet;
 
 public class IntersectionOfTwoLinkedLists_160 {
-    class ListNode {
-        int val;
-        ListNode next;
-
-        ListNode(int x) {
-            val = x;
-            next = null;
-        }
-    }
 
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
         // add all nodes in one list to sets instead of traversing both and adding both lists - less space
