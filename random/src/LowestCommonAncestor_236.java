@@ -114,7 +114,7 @@ public class LowestCommonAncestor_236 {
     }
 
     public static void main(String[] args) {
-        TreeNode root = ConstructTree.constructTree("[3,5,1,6,2,0,8,null,null,7,4]");
+        TreeNode root = TreeNode.decodeStringToTree("[3,5,1,6,2,0,8,null,null,7,4]");
         int pVal = 5, qVal = 1;
         LowestCommonAncestor_236 solver = new LowestCommonAncestor_236();
         System.out.println(solver.testHelper(root, pVal, qVal).val);

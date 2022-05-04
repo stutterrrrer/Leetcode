@@ -26,7 +26,7 @@ public class PathSum2_113 {
     }
 
     public static void main(String[] args) {
-        TreeNode root = ConstructTree.constructTree("[5,4,8,11,null,13,4,7,2,null,null,5,1]");
+        TreeNode root = TreeNode.decodeStringToTree("[5,4,8,11,null,13,4,7,2,null,null,5,1]");
         int target = 22;
         PathSum2_113 solver = new PathSum2_113();
         for (List<Integer> path : solver.pathSum(root, target))

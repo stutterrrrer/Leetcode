@@ -37,7 +37,7 @@ public class KthSmallestInBST_230 {
     }
 
     public static void main(String[] args) {
-        TreeNode root = ConstructTree.constructTree("[3,1,4,null,2]");
+        TreeNode root = TreeNode.decodeStringToTree("[3,1,4,null,2]");
         int rank = 4;
         KthSmallestInBST_230 solver = new KthSmallestInBST_230();
         solver.inOrderPrint(root);

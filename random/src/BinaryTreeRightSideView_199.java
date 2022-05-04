@@ -41,7 +41,7 @@ public class BinaryTreeRightSideView_199 {
     }
 
     public static void main(String[] args) {
-        TreeNode input = ConstructTree.constructTree("[1,2,3,4,null,5,6,7,null]");
+        TreeNode input = TreeNode.decodeStringToTree("[1,2,3,4,null,5,6,7,null]");
         BinaryTreeRightSideView_199 solver = new BinaryTreeRightSideView_199();
         System.out.println(solver.rightSideViewDFS(input));
         System.out.println(solver.rightSideViewBFS(input));

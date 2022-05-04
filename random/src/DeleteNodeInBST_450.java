@@ -35,7 +35,7 @@ public class DeleteNodeInBST_450 {
     }
 
     public static void main(String[] args) {
-        TreeNode root = ConstructTree.constructTree("[5,3,6,2,4,null,7]");
+        TreeNode root = TreeNode.decodeStringToTree("[5,3,6,2,4,null,7]");
         int key = 3;
         DeleteNodeInBST_450 solver = new DeleteNodeInBST_450();
 

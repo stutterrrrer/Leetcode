@@ -49,7 +49,7 @@ public class BinaryTreeZigZagLevelOrder_103 {
 
     public static void main(String[] args) {
         String tree = "[1,2,3,4,5,6,7,8,9,10,11]";
-        TreeNode input = ConstructTree.constructTree(tree);
+        TreeNode input = TreeNode.decodeStringToTree(tree);
         BinaryTreeZigZagLevelOrder_103 solver = new BinaryTreeZigZagLevelOrder_103();
         for (List<Integer> list : solver.zigzagLevelOrder(input)) System.out.println(list);
 //		solver.zigzagLevelOrder(input);
