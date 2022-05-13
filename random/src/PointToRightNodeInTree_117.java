@@ -3,7 +3,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 public class PointToRightNodeInTree_117 {
-    class Node {
+    private class Node {
         public int val;
         public Node left;
         public Node right;
@@ -14,25 +14,23 @@ public class PointToRightNodeInTree_117 {
     private HashMap<Integer, Node> awaitingLeft;
 
     public Node connectConstantSpace(Node root) {
-        Node connectedParent = root; // root is the only node on depth 0 -> fully connected level (depth)
-        while (true) {
-            // find the leftmost node of the next (unconnected) level
-            while (connectedParent != null && connectedParent.left == null && connectedParent.right == null)
-                connectedParent = connectedParent.next;
-            if (connectedParent == null) break; // there's no next level
-            Node leftmostOfNextLevel = connectedParent.left != null ? connectedParent.left : connectedParent.right;
-            // now start connecting the next level:
-            for (Node cur = leftmostOfNextLevel; ; cur = cur.next) {
-                if (cur == connectedParent.left && connectedParent.right != null) {
-                    cur.next = connectedParent.right;
-                } else {
-                    do connectedParent = connectedParent.next;
-                    while (connectedParent != null && connectedParent.left == null && connectedParent.right == null);
-                    if (connectedParent == null) break; // next level is all connected
-                    cur.next = connectedParent.left != null ? connectedParent.left : connectedParent.right;
+        for (Node linkedParent = root, leftmostOfNextLevel; ; linkedParent = leftmostOfNextLevel) {
+            // 1. find the leftmost node of the next (unconnected) level
+            while (linkedParent != null && linkedParent.left == null && linkedParent.right == null)
+                linkedParent = linkedParent.next;
+            if (linkedParent == null) break; // if there's no next level
+            leftmostOfNextLevel = linkedParent.left != null ? linkedParent.left : linkedParent.right;
+            // 2. now start connecting the next level:
+            for (Node cur = leftmostOfNextLevel; ; cur = cur.next) { // makes one 'cur.next =' connection per iteration
+                if (cur == linkedParent.left && linkedParent.right != null) { // 1. when cur.next = cur's sibling
+                    cur.next = linkedParent.right;
+                } else { // 2. when cur.next = cur's cousin
+                    do linkedParent = linkedParent.next;
+                    while (linkedParent != null && linkedParent.left == null && linkedParent.right == null);
+                    if (linkedParent == null) break; // next level is all connected
+                    cur.next = linkedParent.left != null ? linkedParent.left : linkedParent.right;
                 }
             }
-            connectedParent = leftmostOfNextLevel;
         }
         return root;
     }
