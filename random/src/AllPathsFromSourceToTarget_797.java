@@ -1,56 +1,58 @@
+import java.util.ArrayList;
 import java.util.Deque;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
 public class AllPathsFromSourceToTarget_797 {
-    private HashMap<Integer, List<Integer>> sourceVerticesTo;
     private int[][] graph;
-    private int n;
+    private int target;
+    private boolean[] isDeadEnd;
     private List<List<Integer>> paths;
 
     public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
         this.graph = graph;
-        n = graph.length;
-        paths = new LinkedList<>();
-        Deque<Integer> curPath = new LinkedList<>();
+        target = graph.length - 1;
+        isDeadEnd = new boolean[target + 1];
+        paths = new ArrayList<>(); // use ArrayList over LinkedList for space efficiency
+        Deque<Integer> curPath = new LinkedList<>(); // Deque (LinkedList) for fast insert and removal
         dfs(0, curPath);
         return paths;
     }
 
     private void dfs(int vertex, Deque<Integer> curPath) {
+        if (isDeadEnd[vertex]) return;
         curPath.addLast(vertex);
-        if (vertex == n - 1) paths.add(new LinkedList<>(curPath));
-        else for (int target : graph[vertex]) dfs(target, curPath);
+        if (vertex == target) paths.add(new ArrayList<>(curPath));
+        else { // vertex is true if 1. has no neighbors; 2. all neighbors are dead ends
+            isDeadEnd[vertex] = true;
+            for (int neighbor : graph[vertex]) { // if no neighbor -> true
+                dfs(neighbor, curPath);
+                isDeadEnd[vertex] = isDeadEnd[vertex] && isDeadEnd[neighbor]; // if all neighbors are dead ends -> true
+            }
+        }
         curPath.removeLast();
     }
 
-    public List<List<Integer>> allPathsSourceTargetExtra(int[][] graph) {
+    public List<List<Integer>> allPathsSourceTargetNaive(int[][] graph) {
         this.graph = graph;
-        int n = graph.length;
-        boolean[] visited = new boolean[n];
-        sourceVerticesTo = new HashMap<>();
-        buildFromGraph(0, visited);
-        paths = new LinkedList<>();
+        target = graph.length - 1;
+        paths = new ArrayList<>();
         Deque<Integer> curPath = new LinkedList<>();
-        findPaths(n - 1, curPath);
+        dfsNaive(0, curPath);
         return paths;
     }
 
-    private void findPaths(int vertex, Deque<Integer> curPath) {
-        curPath.push(vertex); // should be first out
-        if (vertex == 0) paths.add(new LinkedList<>(curPath));
-        else for (int source : sourceVerticesTo.get(vertex)) findPaths(source, curPath);
-        curPath.pop();
+    private void dfsNaive(int vertex, Deque<Integer> curPath) {
+        curPath.addLast(vertex);
+        if (vertex == target) paths.add(new ArrayList<>(curPath));
+        else for (int target : graph[vertex]) dfsNaive(target, curPath);
+        curPath.removeLast();
     }
 
-    private void buildFromGraph(int source, boolean[] visited) {
-        if (visited[source]) return;
-        visited[source] = true;
-        for (int target : graph[source]) {
-            sourceVerticesTo.putIfAbsent(target, new LinkedList<>());
-            sourceVerticesTo.get(target).add(source);
-            buildFromGraph(target, visited);
-        }
+    public static void main(String[] args) {
+        int[][] graph = {{4, 3, 1}, {3, 2, 4}, {3}, {4}, {}};
+        int[][] graphWithDeadEnds = {{4, 3, 1}, {3, 2, 4}, {3}, {}, {}};
+        AllPathsFromSourceToTarget_797 solver = new AllPathsFromSourceToTarget_797();
+        for (List<Integer> list : solver.allPathsSourceTarget(graph)) System.out.println(list);
     }
 }
