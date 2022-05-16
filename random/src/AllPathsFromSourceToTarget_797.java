@@ -51,8 +51,8 @@ public class AllPathsFromSourceToTarget_797 {
 
     public static void main(String[] args) {
         int[][] graph = {{4, 3, 1}, {3, 2, 4}, {3}, {4}, {}};
-        int[][] graphWithDeadEnds = {{4, 3, 1}, {3, 2, 4}, {3}, {}, {}};
+        int[][] graphWithDeadEnds = {{1,2,6}, {3}, {1, 6}, {4, 5}, {}, {4}, {}};
         AllPathsFromSourceToTarget_797 solver = new AllPathsFromSourceToTarget_797();
-        for (List<Integer> list : solver.allPathsSourceTarget(graph)) System.out.println(list);
+        for (List<Integer> list : solver.allPathsSourceTarget(graphWithDeadEnds)) System.out.println(list);
     }
 }
