@@ -2,21 +2,22 @@ import java.util.*;
 
 public class Subsets_78 {
     private int[] nums;
-    private int n;
     private List<List<Integer>> subsets;
     public List<List<Integer>> subsets(int[] nums) {
         this.nums = nums;
-        n = nums.length;
-        subsets = new ArrayList<>(Collections.singletonList(new ArrayList<>())); // add an empty subset first
-        Deque<Integer> curPath = new LinkedList<>();
-        for (int i = 0; i < n; i++) subsetsStarting(i, curPath);
+        subsets = new ArrayList<>();
+        Deque<Integer> curSet = new LinkedList<>();
+        includeOrExcludeNumStarting(0, curSet); // each number is either included or excluded in each set
         return subsets;
     }
 
-    private void subsetsStarting(int bgnIndex, Deque<Integer> curPath) {
-        curPath.addLast(nums[bgnIndex]);
-        for (int i = bgnIndex + 1; i < n; i++) subsetsStarting(i, curPath);
-        subsets.add(new ArrayList<>(curPath));
-        curPath.removeLast();
+    private void includeOrExcludeNumStarting(int bgn, Deque<Integer> curSet) {
+        if (bgn >= nums.length) subsets.add(new ArrayList<>(curSet)); // when all numbers' in(ex)clusion are decided
+        else {
+            includeOrExcludeNumStarting(bgn + 1, curSet); // exclude nums[bgn]
+            curSet.addLast(nums[bgn]);
+            includeOrExcludeNumStarting(bgn + 1, curSet); // include nums[bgn]
+            curSet.removeLast(); // remove nums[bgn] before returning to decide on in(ex)clusion of nums[bgn - 1]
+        }
     }
 }
