@@ -1,4 +1,64 @@
 public class LongestPalindromicSubstring_5 {
+
+    public String longestPalindromeCenterCharArray(String string) {
+        int n = string.length(), max = 0, bgn = 0;
+        char[] s = string.toCharArray();
+        for (int leftCen = 0, rightCen = 0; rightCen < n; ) {
+            if (s[leftCen] != s[rightCen]) leftCen = rightCen;
+            int wing = 0;
+            while (leftCen - wing - 1>= 0 && rightCen + wing + 1 < n
+                    && s[leftCen - wing - 1] == s[rightCen + wing + 1])
+                wing++;
+            int length = (rightCen + wing) - (leftCen - wing) + 1;
+            if (length > max) {
+                max = length;
+                bgn = leftCen - wing;
+            }
+            if (leftCen < rightCen) leftCen++; // so s[rightCen] can try being a single center
+            else rightCen++; // each char will have a chance to be both left center and right center
+        }
+        return string.substring(bgn, bgn + max);
+    }
+
+    public String longestPalindromeCenter(String s) {
+        int n = s.length(), max = 0, bgn = 0;
+        for (int leftCen = 0, rightCen = 0; rightCen < n; ) {
+            if (s.charAt(leftCen) != s.charAt(rightCen)) leftCen = rightCen;
+            int wing = 0;
+            while (leftCen - wing - 1>= 0 && rightCen + wing + 1 < n
+                    && s.charAt(leftCen - wing - 1) == s.charAt(rightCen + wing + 1))
+                wing++;
+            int length = (rightCen + wing) - (leftCen - wing) + 1;
+            if (length > max) {
+                max = length;
+                bgn = leftCen - wing;
+            }
+            if (leftCen < rightCen) leftCen++; // so s[rightCen] can try being a single center
+            else rightCen++; // each char will have a chance to be both left center and right center
+        }
+        return s.substring(bgn, bgn + max);
+    }
+
+    public String longestPalindromeCenterMessy(String s) {
+        char[] str = s.toCharArray();
+        int n = str.length, longest = 1, bgnIndex = 0;
+        for (int leftCenter = 0; leftCenter < n - 1; leftCenter++) {
+            int rightCenter = str[leftCenter] == str[leftCenter + 1] ? leftCenter + 1 : leftCenter;
+            for (int right = leftCenter; right <= rightCenter; right++) { // this loop has 1 or 2 iterations.
+                int lenOfCurPalindrome = right - leftCenter + 1;
+                for (int wing = 1; leftCenter - wing >= 0 && right + wing <= n - 1; wing++) {
+                    if (str[leftCenter - wing] == str[right + wing]) lenOfCurPalindrome += 2;
+                    else break;
+                }
+                if (lenOfCurPalindrome > longest) {
+                    longest = lenOfCurPalindrome;
+                    bgnIndex = leftCenter - (lenOfCurPalindrome - 1) / 2;
+                }
+            }
+        }
+        return s.substring(bgnIndex, bgnIndex + longest);
+    }
+
     public String longestPalindrome(String s) {
         String reverse = new StringBuilder(s).reverse().toString();
         // now find the longest common sub-string between s and its reverse;
@@ -33,28 +93,8 @@ public class LongestPalindromicSubstring_5 {
         return true;
     }
 
-    public String longestPalindromeCenter(String s) {
-        char[] str = s.toCharArray();
-        int n = str.length, longest = 1, bgnIndex = 0;
-        for (int leftCenter = 0; leftCenter < n - 1; leftCenter++) {
-            int rightCenter = str[leftCenter] == str[leftCenter + 1] ? leftCenter + 1 : leftCenter;
-            for (int right = leftCenter; right <= rightCenter; right++) { // this loop has 1 or 2 iterations.
-                int lenOfCurPalindrome = right - leftCenter + 1;
-                for (int wing = 1; leftCenter - wing >= 0 && right + wing <= n - 1; wing++) {
-                    if (str[leftCenter - wing] == str[right + wing]) lenOfCurPalindrome += 2;
-                    else break;
-                }
-                if (lenOfCurPalindrome > longest) {
-                    longest = lenOfCurPalindrome;
-                    bgnIndex = leftCenter - (lenOfCurPalindrome - 1) / 2;
-                }
-            }
-        }
-        return s.substring(bgnIndex, bgnIndex + longest);
-    }
-
     public static void main(String[] args) {
         LongestPalindromicSubstring_5 solver = new LongestPalindromicSubstring_5();
-        System.out.println(solver.longestPalindromeCenter("kabcdcbam"));
+        System.out.println(solver.longestPalindromeCenter("babad"));
     }
 }
