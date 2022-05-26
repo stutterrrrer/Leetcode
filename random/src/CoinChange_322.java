@@ -7,19 +7,6 @@ public class CoinChange_322 {
     private int min;
     private Set<Integer> deadEnd;
 
-    public int coinChange(int[] coins, int amount) {
-        int[] minCoinsFor = new int[amount + 1];
-        Arrays.fill(minCoinsFor, 1, amount + 1, Integer.MAX_VALUE);
-        for (int remain = 1; remain <= amount; remain++) {
-            for (int coin : coins) {
-                if (remain - coin >= 0)
-                    minCoinsFor[remain] = Math.min(minCoinsFor[remain], minCoinsFor[remain - coin]);
-            }
-            minCoinsFor[remain] += minCoinsFor[remain] != Integer.MAX_VALUE ? 1 : 0;
-        }
-        return minCoinsFor[amount] <= amount ? minCoinsFor[amount] : -1;
-    }
-
     public int coinChangeBacktrack(int[] coins, int amount) {
         this.coins = coins;
         int n = coins.length;
@@ -42,6 +29,19 @@ public class CoinChange_322 {
             found = makeUpRemain(remain - coins[next], next, count + 1) || found;
         if (!found) deadEnd.add(remain);
         return found;
+    }
+
+    public int coinChange(int[] coins, int amount) {
+        int[] minCoinsFor = new int[amount + 1];
+        Arrays.fill(minCoinsFor, 1, amount + 1, Integer.MAX_VALUE);
+        for (int remain = 1; remain <= amount; remain++) {
+            for (int coin : coins) {
+                if (remain - coin >= 0)
+                    minCoinsFor[remain] = Math.min(minCoinsFor[remain], minCoinsFor[remain - coin]);
+            }
+            minCoinsFor[remain] += minCoinsFor[remain] != Integer.MAX_VALUE ? 1 : 0;
+        }
+        return minCoinsFor[amount] <= amount ? minCoinsFor[amount] : -1;
     }
 
     public static void main(String[] args) {
