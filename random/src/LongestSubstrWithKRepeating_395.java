@@ -1,50 +1,45 @@
 import java.util.HashMap;
-import java.util.Map;
 
 public class LongestSubstrWithKRepeating_395 {
+    char[] chars;
+    int min_freq;
 
     public int longestSubstring(String s, int k) {
-        HashMap<Character, Integer> validChars = new HashMap<>();
-        char[] sequence = s.toCharArray();
-        // count all char frequencies
-        for (char c : sequence)
-            validChars.put(c, validChars.getOrDefault(c, 0) + 1);
-        // leave only the valid characters in the hash map, where their frequencies >= k
-        removeInvalidChars(validChars, k);
-
-        int bgn = 0, end = 0;
-        int maxValidLength = 0;
-        while (end < sequence.length) {
-            HashMap<Character, Integer> curWindow = new HashMap<>();
-            // keep expanding current window from the tail
-            while (end < sequence.length && validChars.containsKey(sequence[end])) {
-                char curChar = sequence[end];
-                curWindow.put(curChar, curWindow.getOrDefault(curChar, 0) + 1);
-                end++;
-            }
-            // either encountered an invalid key or went through the whole string:
-            //todo: keep checking from the start of the window to remove invalid characters
-            // then if the remaining current window is valid, update max length
-            if (!curWindow.isEmpty() && curWindow.values().stream().allMatch(i -> i >= k))
-                maxValidLength = Math.max(end - bgn, maxValidLength);
-            // update validChars - by removing the frequencies contained in this window
-            for (char c : curWindow.keySet())
-                validChars.put(c, validChars.get(c) - curWindow.get(c));
-            removeInvalidChars(validChars, k);
-            // start new window
-            bgn = end + 1;
-            end = bgn;
-        }
-        return maxValidLength;
+        chars = s.toCharArray();
+        min_freq = k;
+        return maxValidLength(0, chars.length);
     }
-    private void removeInvalidChars(HashMap<Character, Integer> charFrequencies, int frequencyThreshold) {
-        charFrequencies.entrySet().removeIf(entry -> entry.getValue() < frequencyThreshold);
+
+    private int maxValidLength(int bgn, int end_excl) {
+        // base case 1: not enough length
+        if (end_excl - bgn < min_freq) return 0;
+        // count char frequencies
+        HashMap<Character, Integer> charFreq = new HashMap<>();
+        for (int i = bgn; i < end_excl; i++) {
+            char c = chars[i];
+            charFreq.put(c, charFreq.getOrDefault(c, 0) + 1);
+        }
+        int charFreqSize = charFreq.size();
+        // remove entry if the char's frequency is less than min_freq
+        charFreq.entrySet().removeIf(entry -> entry.getValue() < min_freq);
+        // rename appropriately
+        HashMap<Character, Integer> validChars = charFreq;
+
+        // base case 2: if the entire list is valid: return this substring's length
+        if (charFreqSize == validChars.size()) return end_excl - bgn;
+
+        // if has invalid chars, go into recursive case
+        int endOfFirst = bgn;
+        while (endOfFirst < end_excl && validChars.containsKey(chars[endOfFirst])) endOfFirst++;
+        int bgnOfSecond = endOfFirst;
+        while (bgnOfSecond < end_excl && !validChars.containsKey(chars[bgnOfSecond])) bgnOfSecond++;
+        return Math.max(maxValidLength(bgn, endOfFirst), maxValidLength(bgnOfSecond, end_excl));
     }
 
     public static void main(String[] args) {
         LongestSubstrWithKRepeating_395 solver = new LongestSubstrWithKRepeating_395();
-        String s = "bbaaacbd";
-        int k = 3;
+        String s = "ababbc";
+        int k = 2;
         System.out.println(solver.longestSubstring(s, k));
     }
 }
